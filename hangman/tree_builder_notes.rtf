@@ -1,0 +1,417 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Menlo-Regular;
+\f3\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red218\green218\blue218;\red22\green22\blue22;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid1\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid2\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid101\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid102\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\})}{\leveltext\leveltemplateid201\'02\'00);}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid202\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid3}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}}
+\margl1440\margr1440\vieww15700\viewh11520\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs24 \cf0 Pre-build the hangman response tree. It's num word lengths * 26 ^ each word's different letter count, but with a huge chunk missing. Could probably do it. Would probably want to compare the "best guesser" tree project with an "any possible letter" project. Also the randomness would now lead to multiple tree branches
+\f1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+eventually i want a hash where each key is a combination of:\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8259 	}alrdy_guessed_ltrs\
+{\listtext	\uc0\u8259 	}guessed_ltr \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}(it can\'92t just be the last one of alrdy_guessed_ltrs, or it\'92d make the order of its entirety matter, which it doesn\'92t)\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8259 	}a possible board\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 and it\'92s value is \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls2\ilvl0\cf0 {\listtext	\uc0\u8259 	}an array, each element of which is a tied-for-ideal\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls2\ilvl1\cf0 {\listtext	\uc0\u8259 	}array of positions (if any) at which to reveal the guessed letter as present at\
+{\listtext	\uc0\u8259 	}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+  #alright, so i just need an answer for EVERY combination of guessed letter (26),\
+  #, board (which is a small subset of actual possibilites of 27^word_length,\
+  # 27 because of the unknown char option, and already guessed letter, which i\
+  # guess might be another exponential or maybe factorial type thing...?)\
+\
+    #that blank guessed_ltr might fuck things up\
+    #i was just trying to avoid having to iterate through all the letters up here\
+    #but maybe i just have to do it... might be fine, since after all, this is the\
+    #only time where you have absolutely no restrictions\
+    #it'll basically be 26 different trees for each word_length\
+    #and if you remember from the hangman ai post i found online, there are very few letters\
+    #for which there is a word_length which the letter does not occur in a single word of\
+    #and even if that was the case it wouldn't be that big of a deal i think, just an empty tree\
+    # sot that's why i changed this above to no longer have a blank guessed letter\
+    #and iterate through all of them\
+\
+#remaining_ltrs_to_guess, like most_freq_ltr before it,\
+      #is more than just alrdy_guessed_ltrs inverted.\
+      #it also excludes any letters not in the remaining dict\
+      #does it need the board? or is the filtered dict already filtered\
+      #so that you don't care\'85\
+#well let\'92s try to think of an example\'85\
+\
+so the board is -rea-\
+and already guessed letters is r, e, a, b, c, t\
+so filtered dictionary has already been filtered (by wrong guesses, and reveals)\
+so that it only has stuff like treat, dream, bream, cream, great, etc.\
+so it\'92ll just iterate through the inverse of alrdy_guessed_ltrs and see if the dictionary includes that letter\
+\
+  #...oh... although actually, if it doesn't include the letter, \
+  #all it means is that we should definitely not reveal anything if they guess it\
+#MEANING, that we\'92re actually just building a tree of the \'93toughies\'94\
+and if the key doesn\'92t exist in the table, then the default response should be reveal nothing\
+even though, yes, many of the values IN the hash are also going to be reveal nothing\'85\
+so should i just not store those ones? \
+also, should i have the key be a primary key auto-increment integer, and just index by a multi-column thing of alrdy_guessed, board, and guessed_ltr??\
+\
+\
+\
+      #so, assuming the next level deeper in is the base base,\
+          #e.g. you've guessed dream and cream and now it's down to bream...\
+          #okay because it's possible to hit the base case but have it not save the best_final_board(s)\
+          #each time this build_tree_rec gets called, it's an instance of finding the best board\
+          #just like it was in the old way\
+          #but so this only gets called, like, around this all_valid_response_baords iterator once?\
+          #or is it actually building a tree already like this?\
+          #\
+          #how is this relating to the keeping track of best_depth?\
+          #well that's just by how it only saves boards if they beat it. thats still functional.\
+\
+\
+okay, well first of all, \'93-\'93 is not an allowable final board\'85\'85..\
+so for some reason 
+\f2\fs22 \cf2 \cb3 \CocoaLigature0 [["b"], "a", "-"]=>["-", "a"]\
+but it should be [\'93i\'94]\
+meaning all guessed letters is b, they\'92ve just guessed a, and the board is -
+\f1\fs24 \cf0 \cb1 \CocoaLigature1 \
+\
+  #...well... now it's not really BEST depth, it's more just like, NOT the end of the tree, no?\
+  def build_tree_rec(guessed_ltr, board, dict, alrdy_guessed_ltrs, best_depth = 1)\
+    this_path_alrdy_guessed_ltrs = alrdy_guessed_ltrs.dup + [guessed_ltr]\
+    #best_depth = this_path_alrdy_guessed_ltrs.count\
+    #puts "\\n   WE'RE ABOUT TO ITERATE THROUGH:"\
+    #print "   "\
+    #p all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs)\
+    #puts ""\
+    best_boards = []\
+    all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs).each do |response_board|\
+      #best_final_boards = [] #not having any effect...\
+\
+      #puts "   ALRIGHT WE'RE ITERATING THROUGH #\{response_board\} (out of #\{all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs)\})"\
+      #puts ""\
+      #print "dict: "\
+      #p dict\
+      filtered_dict = a_dict_filtered_by_wrong_guesses(dict, response_board, this_path_alrdy_guessed_ltrs)\
+      #print "filtered dict after just wrong guesses: "\
+      #p filtered_dict\
+      filtered_dict = a_dict_filtered_by_reveals(filtered_dict, response_board, all_correctly_guessed_ltrs(board))\
+      #print "filtered_dict after also filtered by reveals: "\
+      #p filtered_dict\
+      #puts "alrdy guessed ltrs: #\{this_path_alrdy_guessed_ltrs\}"\
+      #puts "remaining ltrs to guess: #\{remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs)\}"\
+      if remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs).empty?\
+      #meaning the board is filled up, supposedly...\
+        #puts "base case response board: #\{response_board\}"\
+        #puts "   OOOOH A GOOD ONE!!! this_path_alrdy_guessed_ltrs.count: #\{this_path_alrdy_guessed_ltrs.count\} >= best_depth: #\{(best_depth)\}" if this_path_alrdy_guessed_ltrs.count >= (best_depth)\
+        #best_final_boards << response_board.dup if this_path_alrdy_guessed_ltrs.count >= best_depth\
+        if this_path_alrdy_guessed_ltrs.count >= (best_depth)\
+          #self.hangman_tree[[alrdy_guessed_ltrs, guessed_ltr, board]] = [response_board.dup]\
+          #puts "best_boards was: #\{best_boards\} and it will soon receive response_board.dup: #\{response_board\}"\
+          best_boards << response_board.dup\
+        end\
+        if this_path_alrdy_guessed_ltrs.count > (best_depth)\
+          best_depth = this_path_alrdy_guessed_ltrs.count # + 1 ????\
+        end\
+      else\
+        remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs).each do |remaining_ltr_to_guess|\
+          #puts "if they've previously guessed these letters #\{this_path_alrdy_guessed_ltrs\}, the board looks like this #\{response_board\}, and the ltr they just guessed is #\{remaining_ltr_to_guess\}, then the best final boards from here are (follows)"##\{build_tree_rec_wo_comments(remaining_ltr_to_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs)\}."\
+          #self.hangman_tree[[this_path_alrdy_guessed_ltrs, remaining_ltr_to_guess, response_board]] =\
+            best_depth, new_best_boards = build_tree_rec(remaining_ltr_to_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs, best_depth)\
+            best_boards += new_best_boards.dup\
+            best_boards.uniq!\
+            #puts "best_boards coming out of the recursion is: #\{best_boards\}"\
+        end\
+        #puts "alright going back around the valid response boards loop at this level"\
+      end\
+      #puts "alright heading back up a level of recursive depth with best_final_boards as #\{best_final_boards\}"\
+\
+    end\
+\
+    #so now i think there needs to be another part right here where we add an entry for the best coming out of this iterator...\
+    #in fact, all the ones currently saved from inside the iterator are the "DUH"s, the final ones...\
+    #puts "okay, adding best_boards.dup: #\{best_boards\}, and it's about to come out of the recursion!!"\
+    puts "self.hangman_tree[[#\{alrdy_guessed_ltrs\}, #\{guessed_ltr\}, #\{board\}]] = #\{best_boards\}"\
+    self.hangman_tree[[alrdy_guessed_ltrs, guessed_ltr, board]] = best_boards.dup\
+\
+\
+    [best_depth, best_boards]\
+  end\
+\
+  def build_tree_rec_wo_comments(guessed_ltr, board, dict, alrdy_guessed_ltrs)\
+    # this_path_alrdy_guessed_ltrs = alrdy_guessed_ltrs.dup + [guessed_ltr]\
+    # #puts "\\n   WE'RE ABOUT TO ITERATE THROUGH:"\
+    # #print "   "\
+    # #p all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs)\
+    # #puts ""\
+    # all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs).each do |response_board|\
+    #   #best_final_boards = [] #not having any effect...\
+    #   #puts "   ALRIGHT WE'RE ITERATING THROUGH #\{response_board\} (out of #\{all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs)\})"\
+    #   #puts ""\
+    #   #print "dict: "\
+    #   #p dict\
+    #   filtered_dict = a_dict_filtered_by_wrong_guesses(dict, response_board, this_path_alrdy_guessed_ltrs)\
+    #   #print "filtered dict after just wrong guesses: "\
+    #   #p filtered_dict\
+    #   filtered_dict = a_dict_filtered_by_reveals(filtered_dict, response_board, all_correctly_guessed_ltrs(board))\
+    #   #print "filtered_dict after also filtered by reveals: "\
+    #   #p filtered_dict\
+    #   #puts "alrdy guessed ltrs: #\{this_path_alrdy_guessed_ltrs\}"\
+    #   #puts "remaining ltrs to guess: #\{remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs)\}"\
+    #   if remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs).empty?\
+    #     #meaning the board is filled up, supposedly...\
+    #     #puts "base case response board: #\{response_board\}"\
+    #     #puts "   OOOOH A GOOD ONE!!! this_path_alrdy_guessed_ltrs.count: #\{this_path_alrdy_guessed_ltrs.count\} >= best_depth: #\{best_depth\}" if this_path_alrdy_guessed_ltrs.count >= best_depth\
+    #     best_final_boards << response_board.dup if this_path_alrdy_guessed_ltrs.count >= best_depth\
+    #     self.best_depth = this_path_alrdy_guessed_ltrs.count if this_path_alrdy_guessed_ltrs.count > best_depth\
+    #   else\
+    #     remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs).each do |remaining_ltr_to_guess|\
+    #       #puts "if they've previously guessed these letters #\{this_path_alrdy_guessed_ltrs\}, the board looks like this #\{response_board\}, and the ltr they just guessed is #\{remaining_ltr_to_guess\}, then here's the best final boards from here (the following)"##\{build_tree_rec(remaining_ltr_to_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs)\}."\
+    #       self.hangman_tree[[this_path_alrdy_guessed_ltrs, remaining_ltr_to_guess, response_board]] =\
+    #       build_tree_rec(remaining_ltr_to_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs)\
+    #     end\
+    #     #puts "alright going back around the valid response boards loop at this level"\
+    #   end\
+    #   #puts "alright heading back up a level of recursive depth with best_final_boards as #\{best_final_boards\}"\
+    # end\
+    #\
+    # best_final_boards\
+  end\
+\
+\
+OK SO IT\'92S WORKING\'85\
+except, when you run it on length 18, you realize that it should definitely stop caring once the dict is down to one word\
+that would cut down on a ton of rows in the database \
+CANT FIGURE OUT HOW TO DO THAT THOUGH\'85\
+okay also it still doesnt\'92 quite work, we\'92re still getting some empty best final boards\'85\
+OKAY i fixed that by commenting out \'93if this_path_alrdy_guessed_ltrs.count >= (best_depth) on the best_boards << response_board.dup\
+shit but now i noticed 
+\f2\fs22 \cf2 \cb3 \CocoaLigature0 self.hangman_tree[[[], a, -]] = ["i", "a"]\
+yup and when i put that back, it fixed it\'85\
+
+\f1\fs24 \cf0 \cb1 \CocoaLigature1 obviously i need something more specific\'85\
+well so that problem is related\'85\
+i don\'92t actually want what \'93should\'94 go in the []\'85 these are examples of (but not entirety of) the ones that shouldn\'92t take up space in the index\
+it seems like they need to get added for some reason having to do with higher levels of recursion, even if they don\'92t ultimately belong there themselves, so maybe i need to explore REMOVING them at those higher levels?\
+alright, i think i fixed it by just having an \'93if dict.count > 1\'94 around the line where you actually add to self.hangman_tree \'85 looks like you still have to do all of the junk to find deeper stuff. i swear there\'92s got to be a way to just get best_depth and best_boards by incrementing best_depth and adding the last entry in the dict to best_boards rather than go through the whole rigamarole\'85\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f2\fs22 \cf2 \cb3 \CocoaLigature0 self.hangman_tree[[["a", "b", "d", "e", "f", "g", "h", "i", "l", "m", "n", "o"], p, --]] = ["us", "up"]\
+\
+but now we\'92ve got this new problem\'85 i noticed that he\'92s equally valuing giving away this p against not. and maybe that\'92s what we want. but it seems like maybe in a tie-breaker he shouldn\'92t reveal\'85 because like, they haven\'92t guessed \'93w\'94 yet, and maybe they\'92re not smart enough to realize that there are no words left possible with \'93w\'94 given the letters they\'92ve already guessed? but then my other argument from before was that he should even lean TOWARDS revealing so it doesn\'92t seem as cheap / seems more mysterious like he\'92s tricking you (which he essentially is)\
+\
+\
+\
+and there\'92s STILL an OUTSTANDING MYSTERY\'85\
+
+\f1\fs24 \cf0 \cb1 \CocoaLigature1 just some of them are coming out with [] and i don\'92t see the pattern\'85..\
+\
+\
+okay well i was stuck for a while wondering why i was seeing it repeating itself\'85 that is, adding more than one index entry for a given combo of board, guess, and lardy guessed\
+but that was just itself incrementally adding to the same one\
+which led me to think, why not move that part where you actually add the entry until outside the each response board loop?\
+and that seems to work, i mean it still works for word lengths 1\
+but we\'92re still seeing those blanks\'85\
+\
+okay i converted it to indices, which hopefully will save database size\
+still couldn\'92t figure out how to get it to skip stuff if dict.count is 1, but i guess we\'92ll let that slide\'85\
+\
+now there\'92s a new issue:\
+
+\f2\fs22 \cf2 \cb3 \CocoaLigature0 OTHER self.hangman_tree[[["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "s", "y"], r, spo--y]] = [[3], []]\
+      OTHER self.hangman_tree[[["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "s", "y"], t, spo--y]] = [[4], [3, 4]]\
+so between \'93sporty\'94 and \'93spotty\'94\
+the first entry here has it right. you reveal r or not, doesn\'92t matter, either way there\'92s only one word left.\
+but the second entry is a goof. if you reveal t, you COMPLETE THE WORD. they should still have another guess after this. not sure why the algorithm isn\'92t getting it\'85\
+\
+also, just a thought. esp now that we\'92re on reveal indices instead of switching up secret word.\
+basically the 1-letter-words case should be totally free of database entries. \
+because in the final game, it\'92s basically going to look like this:\
+	dict.count == 1? okay, then just answer truthfully\
+	else\'85 is there an entry for this situation in the tree-builder-brain? yes! okay then reveal these\
+	else\'85 REVEAL NOTHING\
+so we shouldn\'92t have to add anything if the answer is reveal nothing\
+and it\'92s always that way for 1-letter-words, because the dict count 1 clause takes care of it\
+\
+although something to note: \
+OTHER self.hangman_tree[[["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"], r, ---o--]] = [[], [2], [1]]\
+in this case, revealing nothing is one of a few equivalent choices\
+so we could keep that in there for him to randomly choose from\
+\
+so just don\'92t add those in if all indices are empty\
+OKAY that\'92s fixed.\
+but we still have the problem of spotty vs. sporty\'85.\
+it says OTHER self.hangman_tree\'85 which means it\'92s the version where the best_words were empty and it just added the whole remaining dict\'85 a new feature, which helped with it not drawing total blanks ever\'85 but now it\'92s over providing\'85 should only provide them \'85 i mean this is kind of patchy, but maybe instead of duping the dictionary entirely, if there is a word in the dictionary that doesn\'92t reveal the entire board, add that one, otherwise, add everything.\
+i mean this feel kind of hack-y like something\'92s wrong with my algorithm. but whatever\'85\
+\
+AH HA! seems to have worked!!! :\
+["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "u", "w", "o", "p", "y", "s"], r, spo--y = [[], [3]] (["spotty", "sporty"])\
+["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "u", "w", "o", "p", "y", "s"], t, spo--y = [[4]] (["sporty"])\
+\
+\
+  if dict.count > 1\
+      if best_words.empty? #note that unlike before, this actually CHANGES best_words, rather than using dict as an alternate\
+        if words_in_the_dict_which_dont_reveal_the_entire_board(board, guessed_ltr, dict).empty?\
+          best_words = dict.dup\
+        else\
+          best_words = words_in_the_dict_which_dont_reveal_the_entire_board(board, guessed_ltr, dict)\
+        end\
+      end\
+      best_idxs = best_words.map \{ |word| indices_to_reveal(word, guessed_ltr) \}\
+      self.hangman_tree[[alrdy_guessed_ltrs, guessed_ltr, board]] = best_idxs unless best_idxs.all?(&:empty?)\
+    end\
+\
+\
+HERE IS A NICE LOOKING VERSION, that might not work exactly right:\
+def build_tree_rec(guessed_ltr, board, dict, alrdy_guessed_ltrs, best_depth = 1)\
+    best_words = []\
+    this_path_alrdy_guessed_ltrs = alrdy_guessed_ltrs.dup + [guessed_ltr]\
+    all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs).each do |response_board|\
+      filtered_dict = a_dict_filtered_by_wrong_guesses(dict, response_board, this_path_alrdy_guessed_ltrs)\
+      filtered_dict = a_dict_filtered_by_reveals(filtered_dict, response_board, all_correctly_guessed_ltrs(board))\
+      if remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs).empty?\
+        best_words << response_board.dup if this_path_alrdy_guessed_ltrs.count >= (best_depth)\
+        best_depth = this_path_alrdy_guessed_ltrs.count if this_path_alrdy_guessed_ltrs.count > (best_depth)\
+      else\
+        remaining_ltrs_to_guess(filtered_dict, this_path_alrdy_guessed_ltrs).each do |remaining_ltr_to_guess|\
+          best_depth, new_best_boards = build_tree_rec(remaining_ltr_to_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs, best_depth)\
+          best_words += new_best_boards.dup\
+          best_words.uniq!\
+        end\
+      end\
+    end\
+    if dict.count > 1\
+      best_words = words_in_the_dict_which_dont_reveal_the_entire_board(board, guessed_ltr, dict) || dict.dup\
+      best_idxs = best_words.map \{ |word| indices_to_reveal(word, guessed_ltr) \}\
+      puts "#\{alrdy_guessed_ltrs\}, #\{guessed_ltr\}, #\{board\} = #\{best_idxs\} (#\{best_words\})" unless best_idxs.all?(&:empty?)\
+      self.hangman_tree[[alrdy_guessed_ltrs, guessed_ltr, board]] = best_idxs unless best_idxs.all?(&:empty?)\
+    end\
+\
+    [best_depth, best_words]\
+  end\
+\
+  def words_in_the_dict_which_dont_reveal_the_entire_board(board, guessed_ltr, dict)\
+    words_in_the_dict_which_dont_reveal_the_entire_board = []\
+    dict.each do |word|\
+      word.split("").each_with_index do |ltr, idx|\
+        next unless board[idx] = "-"\
+        if ltr != guessed_ltr\
+          words_in_the_dict_which_dont_reveal_the_entire_board << word\
+          break\
+        end\
+      end\
+      #look at only the letters in the word which are still "-"s in the board\
+      #if any of them is NOT the guessed_ltr, return true\
+    end\
+\
+    words_in_the_dict_which_dont_reveal_the_entire_board.empty? ? nil : words_in_the_dict_which_dont_reveal_the_entire_board\
+  end\
+\
+\
+\pard\tx720\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\cf2 \
+JESUS this is annoying, to check for alrdy_guessed_ltr_combo_alrdy_in_db? you have to have such a crazy WHERE clause\'85\
+SEEMS LIKE THIS WOULD SLOW IT DOWN A LOT IF IT HAS TO CHECK FOR THIS EVERY FUCKING TIME\
+EVEN IF THAT SAVES A LOT OF SPACE IN THE DATABASE\'85\
+MAYBE I SHOULD JUST DO THIS ALL YAML STYLE...\
+\
+\
+CREATE TABLE reveals (\
+  id INTEGER PRIMARY KEY,\
+  alrdy_guessed_ltr_combo_id INTEGER NOT NULL,\
+  guessed_ltr CHAR(1) NOT NULL,\
+  board CHAR(50) NOT NULL,\
+  reveal_index_sets TEXT NOT NULL\
+);\
+\
+CREATE TABLE alrdy_guessed_ltr_combos (\
+  id INTEGER PRIMARY KEY,\
+  a INTEGER NOT NULL,\
+  b INTEGER NOT NULL,\
+  c INTEGER NOT NULL,\
+  d INTEGER NOT NULL,\
+  e INTEGER NOT NULL,\
+  f INTEGER NOT NULL,\
+  g INTEGER NOT NULL,\
+  h INTEGER NOT NULL,\
+  i INTEGER NOT NULL,\
+  j INTEGER NOT NULL,\
+  k INTEGER NOT NULL,\
+  l INTEGER NOT NULL,\
+  m INTEGER NOT NULL,\
+  n INTEGER NOT NULL,\
+  o INTEGER NOT NULL,\
+  p INTEGER NOT NULL,\
+  q INTEGER NOT NULL,\
+  r INTEGER NOT NULL,\
+  s INTEGER NOT NULL,\
+  t INTEGER NOT NULL,\
+  u INTEGER NOT NULL,\
+  v INTEGER NOT NULL,\
+  w INTEGER NOT NULL,\
+  x INTEGER NOT NULL,\
+  y INTEGER NOT NULL,\
+  z INTEGER NOT NULL\
+);\
+\
+  # def alrdy_guessed_ltr_combo_alrdy_in_db?\
+  #   query = (<<-SQL)\
+  #   SELECT\
+  #   *\
+  #   FROM\
+  #   alrdy_guessed_ltr_combos\
+  #   WHERE\
+  #   a = ?, b = ?, c = ?, d = ?, e = ?, f = ?, g = ?, h = ?, i = ?, j = ?,\
+  #   k = ?, l = ?, m = ?, d = ?, e = ?, a = ?, b = ?, c = ?, d = ?, e = ?,\
+  #   a = ?, b = ?, c = ?, d = ?, e = ?, z = ?\
+  #   SQL\
+  # end\
+\
+\pard\tx220\tx720\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li720\fi-720\pardirnatural
+\ls3\ilvl0\cf2 \CocoaLigature1 {\listtext	1)	}\CocoaLigature0 might need a way to pause the process and pick up where left off\'85\
+\pard\tx940\tx1440\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1440\fi-1440\pardirnatural
+\ls3\ilvl1\cf2 \CocoaLigature1 {\listtext	
+\f3 \uc0\u8259 
+\f2 	}would that involve saving the state of Skynet? i have no idea how i\'92d do that with all the recursive depth\'85\
+{\listtext	
+\f3 \uc0\u8259 
+\f2 	}could saving all the SkynetHelper \'93sh\'94 objects work?\CocoaLigature0 \
+\pard\tx220\tx720\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li720\fi-720\pardirnatural
+\ls3\ilvl0\cf2 \CocoaLigature1 {\listtext	2)	}\CocoaLigature0 could stand to optimize for timing\
+\ls3\ilvl0\CocoaLigature1 {\listtext	3)	}\CocoaLigature0 rename functions and variables to manageable length  DONE!!\
+\ls3\ilvl0\CocoaLigature1 {\listtext	4)	}\CocoaLigature0 explore having way fewer passed arguments and more instance variables, as long as it doesn\'92t break the recursion\'85\
+\pard\tx940\tx1440\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li1440\fi-1440\pardirnatural
+\ls3\ilvl1\cf2 \CocoaLigature1 {\listtext	
+\f3 \uc0\u8259 
+\f2 	}might be easier to conceptualize now that it\'92s broken out with a helper\
+{\listtext	
+\f3 \uc0\u8259 
+\f2 	}yes i think i\'92m on to something\'85\CocoaLigature0 \
+\pard\tx220\tx720\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\li720\fi-720\pardirnatural
+\ls3\ilvl0\cf2 \CocoaLigature1 {\listtext	5)	}\CocoaLigature0 consider splitting the tree_builder out into multiple classes, since he\'92s about 2x the 125 line suggested max DONE!!!!\
+\pard\tx720\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+\cf2 \
+\
+testing it out on 20 letter words\'85\
+wondering if i lost along the way, or maybe never implemented\
+the idea that once dict is 1, you\'92re not really earning guesses anymore\
+because they\'92ll just guess only right ones, that doesn\'92t count against you. you\'92re maximizing WRONG guesses\
+WHICH MAYBE I HAVE TO UNDO THE BIT I DID ABOUT SPORTY VS SPOTTY BECAUSE OF THAT? DUH\'85\
+i should review my older notes about this in case there\'92s anything else higher level i thought of a while ago i\'92ve lost track of\'85\
+}

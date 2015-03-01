@@ -1,0 +1,123 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0   # def best_response_board(guessed_ltr, board, filtered_dict = dict, alrdy_guessed_ltrs)\
+  #   all_valid_response_boards.each do |response_board|\
+  #     probable_guess = most_freq_letter(response_board, filtered_dict)\
+  #     best_response_board(probable_guess, response_board, filtered_dict, alrdy_guessed_ltrs.dup)\
+  #\
+  #   best_board\
+  # end\
+\
+\
+\
+\
+\
+\
+\
+\
+  def best_response_board_v1(guessed_ltr, board, dict, alrdy_guessed_ltrs, best_board = nil) #,best_depth = 0)\
+    best_board = board.dup if best_board == nil\
+    dict.select! \{ |word| word.length == board.length \}\
+    this_path_alrdy_guessed_ltrs = alrdy_guessed_ltrs.dup\
+    this_path_alrdy_guessed_ltrs << guessed_ltr\
+\
+    #OH OKAY. YEAH SO THAT WAS A BIG DEAL. I JUST WASN'T FILTERING STUFF IMMEDIATELY. SHOULD HAVE BEEN A SIGN THAT I WAS REFERRING TO THE RESPONSE BOARD SO MUCH BEFORE JUST DEALING WITH THE ORIGINAL BOARD.\
+    # if dict.count == 1\
+    #   return 1\
+    #   puts "base case #\{guessed_ltr\} #\{board\}"\
+    #   #p dict\
+    # end\
+    #depth = 0\
+    #best_depth = 0\
+    went_into_iterator = false\
+    puts ""\
+    puts "AVBTRW TO ITERATE ON: #\{all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs)\}\\n"\
+    all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs).each do |response_board|\
+      went_into_iterator = true\
+      #puts "iterating #\{guessed_ltr\} in #\{board\}"\
+      puts "iterating response boards. this one is #\{response_board\}" #would be nice if i could say "without the (previous letter that was just NOT revealed but isn't seen in the board)"\
+      p dict.count\
+      filtered_dict = a_dict_filtered_by_wrong_guesses(dict, response_board, this_path_alrdy_guessed_ltrs)\
+      p filtered_dict.count\
+      filtered_dict = a_dict_filtered_by_reveals(filtered_dict, response_board, all_correctly_guessed_ltrs(board))\
+      p filtered_dict.count\
+      puts "dict: #\{dict\}"\
+      puts "filt_dict: #\{filtered_dict\}"\
+      #depth = 0\
+       #unless probable_guess.nil? || this_path_alrdy_guessed_ltrs.include?(probable_guess) #this fixed a bug but may indicate an issue with most_freq_letters... although the second half makes sense to keep of course\
+      probable_guess = most_freq_letter(response_board, filtered_dict) #MAY HAVE AN ISSUE WITH IT NOT FILTERING OUT FOR ALL ALREADY REVEALED LETTERS IF YOU'RE TESTING THIS FROM STARTING IN THE MIDDLE...\
+      #this_path_alrdy_guessed_ltrs << probable_guess\
+      #if most freq letter is able to find a nil, that means something's wrong with the valid response board logic, i think...\
+      #return 1 if probable_guess.nil?\
+      if probable_guess.nil?\
+        puts "\\n  base cased"\
+        if this_path_alrdy_guessed_ltrs.count > best_depth\
+          puts "  because this path's depth #\{this_path_alrdy_guessed_ltrs.count\} is greater than the best depth of #\{best_depth\},"\
+          puts "  updated best board from #\{best_board\} to #\{response_board\}" #this is wrong... i mean, it should just return the one at the very top of the tree which ENDS here...\
+          best_board = response_board.dup\
+          self.best_depth = this_path_alrdy_guessed_ltrs.count\
+          puts "  just reset best depth to #\{this_path_alrdy_guessed_ltrs.count\}"\
+        end\
+      else\
+        #deeper_recursing_filtered_dict = filtered_dict.dup\
+        puts "calling recursively with alrdy guessed ltrs being #\{this_path_alrdy_guessed_ltrs\}"\
+        best_response_board_v1(probable_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs, best_board) #,best_depth)\
+        #depth += best_response_board(probable_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs)\
+        #if depth > best_depth save this path... or should i build a tree like word_chains and then travel it?\
+        #p depth\
+      end\
+    end\
+\
+    if went_into_iterator = false\
+      puts "\\n  base cased in the place outside the iterator such as for catching -read"\
+      if this_path_alrdy_guessed_ltrs.count > best_depth\
+        puts "  updated best board from #\{best_board\} to #\{board\}"\
+        best_board = board.dup\
+      end\
+    end\
+    puts "\\n  ULTIMATE DEPTH #\{this_path_alrdy_guessed_ltrs.count\}\\n"##\{depth\}"\
+    #depth\
+    #this_path_alrdy_guessed_ltrs\
+    best_board\
+  end\
+\
+  #perhaps above function should be named valid_vis_a_vis_dict_and_guessed_ltrs?\
+\
+  #OKAY so the issue with this vis-a-vis bug is that i would expect this dict to already be taken care of\
+  #meaning: why does it say it's okay to reveal the board "-rea-" when there are already so many\
+  #guessed letters that there's no words left ...?\
+\
+  #hopefully moving that dictionary up in the recursive function should help...\
+\
+  #also it's possible that if i am recreating this work / diong it twice that here's where i'm supposed to be doing it (first_ and the other one is redundant now)\}\
+\
+  ##OH COOL HEY! so the order of the alrdy_guessed_ltrs should form a unique branch of the tree, and its length should be the depth i'm looking for!\
+\
+  # def valid_vis_a_vis_dict?(board, dict)\
+  # #  dict.each \{ |word| puts "visavis: #\{word\}" \}\
+  #\
+  #   dict.any? \{ |word| word =~ to_regex(board) \} ##does this one need to check for already guessed letters too...?\
+  # end\
+\
+  # def super_check(guessed_letter, board_state)\
+  #   return 1 if possible_words(board_state) == 1 #recursion!! need to capture the depth\
+  #\
+  #   depth = 0\
+  #   best_depth = 0\
+  #   best_response = [] #an array of the positions to reveal\
+  #\
+  #   possible_responses = [] # << either no reveal, or any possible reveal\
+  #   possible_responses.each do |possible_response|\
+  #     depth += super_check(most_frequent_letter(possible_response, board_state))\
+  #     if depth > best_depth\
+  #       best_response = possible_response\
+  #       best_depth = depth\
+  #     end\
+  #   end\
+  #\
+  #   depth ##so it has to return depth to function recursively, but what you really get out of it is whatever best_response is by the time it escapes the original call\
+  # end}

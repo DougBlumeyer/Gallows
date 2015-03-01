@@ -1,0 +1,78 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 def best_final_response_board(guessed_ltr, board, dict, alrdy_guessed_ltrs)\
+    this_path_alrdy_guessed_ltrs = alrdy_guessed_ltrs.dup + [guessed_ltr]\
+    puts "\\nAVBTRW TO ITERATE ON: #\{all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs)\}\\n"\
+    all_valid_response_boards(guessed_ltr, board, dict, this_path_alrdy_guessed_ltrs).each do |response_board|\
+      went_into_iterator = true\
+      puts "iterating response boards. this one is #\{response_board\}"\
+      filtered_dict = a_dict_filtered_by_wrong_guesses(dict, response_board, this_path_alrdy_guessed_ltrs)\
+      filtered_dict = a_dict_filtered_by_reveals(filtered_dict, response_board, all_correctly_guessed_ltrs(board))\
+      puts "filt_dict: #\{filtered_dict\}"\
+      probable_guess = most_freq_letter(response_board, filtered_dict)\
+      if probable_guess.nil?\
+        puts "\\n  base cased"\
+        puts "  this path's depth: #\{this_path_alrdy_guessed_ltrs.count\}; best depth: #\{best_depth\}"\
+        if this_path_alrdy_guessed_ltrs.count > best_depth\
+          puts "  because this path's depth is greater,"\
+          puts "  updated best board from #\{self.best_final_board\} to #\{response_board\}"\
+          self.best_final_board = response_board.dup\
+          self.best_depth = this_path_alrdy_guessed_ltrs.count\
+        end\
+      else\
+        best_final_response_board(probable_guess, response_board, filtered_dict, this_path_alrdy_guessed_ltrs)\
+      end\
+    end\
+\
+    best_final_board\
+  end\
+\
+\
+  def most_freq_letter(board, dict)\
+    ltr_hash = Hash.new(0)\
+    p board\
+    dict.each do |word|\
+      #p word\
+      board.split("").each_with_index do |ltr, idx|\
+        if ltr == "-"\
+          ltr_hash[word[idx]] += 1\
+          puts "board: #\{board\}, word: #\{word\}, ltr: #\{ltr\}, idx: #\{idx\}, hashcount of #\{word[idx]\}: #\{ltr_hash[word[idx]]\}"\
+        end\
+      end\
+    end\
+    most_freq_ltrs = ltr_hash.sort_by \{ |h, k| k \}\
+    puts "most freq ltrs: #\{most_freq_ltrs\}"\
+    most_freq_ltr, k = most_freq_ltrs.last #it might be nice to shuffle the top rankers for variable behavrio\
+\
+    return nil if most_freq_ltr == []\
+    most_freq_ltr\
+  end\
+\
+  def a_dict_filtered_by_wrong_guesses(dict, board, alrdy_guessed_ltrs)\
+    puts "WRONG GUESSES: #\{all_wrong_guesses(board, alrdy_guessed_ltrs)\}"\
+    dict.reject do |word|\
+      contains_any_ltrs_that_are_wrong_guesses(word, board, alrdy_guessed_ltrs)\
+    end\
+  end\
+\
+\
+  def filter_this_word_by_this_correctly_guessed_letter?(possible_secret_word, correctly_guessed_ltr, board)\
+    correct_indices = correctly_guessed_ltrs_indices(correctly_guessed_ltr, board)\
+    possible_secret_word.split("").each_with_index do |ltr, idx|\
+      if correct_indices.include?(idx) && ltr != correctly_guessed_ltr\
+        #puts "filtered #\{possible_secret_word\} because the set #\{correct_indices\} included #\{idx\} but the letter there #\{ltr\} isn't #\{guessed_ltr\}"\
+        return true\
+      end\
+      if !correct_indices.include?(idx) && ltr == correctly_guessed_ltr\
+        #puts "filtered #\{possible_secret_word\} because the set #\{correct_indices\} did NOT include #\{idx\} but the letter there was an #\{ltr\} anyway"\
+        return true\
+      end\
+    end\
+\
+    #puts "WOW! didn't filter #\{possible_secret_word\} against letters at positions #\{correct_indices\} being #\{guessed_ltr\}"\
+    false\
+  end}

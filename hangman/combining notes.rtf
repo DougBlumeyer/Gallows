@@ -1,0 +1,57 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red218\green218\blue218;\red22\green22\blue22;}
+\margl1440\margr1440\vieww15300\viewh20980\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f0\fs22 \cf2 \cb3 \CocoaLigature0 board: --\
+aash.alt_tree[board]: ["-d", "a-", "-h", "-m", "-n", "-s", "-t", "-w", "-x", "-e", "b-", "-i", "-y", "-o", "d-", "e-", "-a", "f-", "g-", "h-", "i-", "-f", "l-", "m-", "-u", "n-", "o-", "-r", "p-", "r-", "s-", "t-", "u-", "-p", "w-", "x-", "y-"]\
+\
+board: -d\
+aash.alt_tree[board]: ["ad", "ed", "id"]\
+\
+board: ed\
+aash.alt_tree[board]: []\
+\
+board: id\
+aash.alt_tree[board]: []\
+["a"], d, -d = [[1], [1]] (["ed", "id"]) remaining dict: ["ed", "id"]\
+\
+board: -d\
+aash.alt_tree[board]: ["ad", "ed", "id"]\
+\
+board: ed\
+aash.alt_tree[board]: []\
+\
+board: id\
+aash.alt_tree[board]: []\
+\
+board: id\
+aash.alt_tree[board]: []\
+["a"], e, -- = [[0], []] (["ed", "id"]) remaining dict: ["ed", "id"]\
+\
+board: --\
+aash.alt_tree[board]: ["--", "a-", "-h", "-m", "-n", "-s", "-t", "-w", "-x", "-e", "b-", "-i", "-y", "-o", "d-", "e-", "-a", "f-", "g-", "h-", "i-", "-f", "l-", "m-", "-u", "n-", "o-", "-r", "p-", "r-", "s-", "t-", "u-", "-p", "w-", "x-", "y-"]\
+\
+board: --\
+aash.alt_tree[board]: ["--", "a-", "-h", "-m", "-n", "-s", "-t", "-w", "-x", "-e", "b-", "-i", "-y", "-o", "d-", "e-", "-a", "f-", "g-", "h-", "i-", "-f", "l-", "m-", "-u", "n-", "o-", "-r", "p-", "r-", "s-", "t-", "u-", "-p", "w-", "x-", "y-"]\
+\
+board: --\
+aash.alt_tree[board]: ["--", "a-", "-h", "-m", "-n", "-s", "-t", "-w", "-x", "-e", "b-", "-i", "-y", "-o", "d-", "e-", "-a", "f-", "g-", "h-", "i-", "-f", "l-", "m-", "-u", "n-", "o-", "-r", "p-", "r-", "s-", "t-", "u-", "-p", "w-", "x-", "y-"]\
+\
+board: e-\
+aash.alt_tree[board]: ["ed", "eh", "em", "en", "ex"]\
+\
+\
+something weird is going on here\'85\
+and it definitely has to do with the AltAltSkynetHelper already trying to take care of stuff, but the pre-existing build_tree_rec thing is doing its filtered_dict stuff based on those\'85 somehow alt_tree is speaking to it differently than valid_rspnses was\'85 \
+\
+like why isn\'92t it doing \'93ad\'94? it says it\'92s going to iterate through ["ad", "ed", "id\'94], but then it skips ad. also the board seems to be one behind/ahead like problems in the days of yore.\
+then it like iterates back up and around -d for some reason, and doubles up on id that time around, then does \'97 three times in a row\'85\
+probably doesn\'92t do \'93ad\'94 because it think it guessed \'93a\'94 already.\
+\
+OH!\
+well yeah, that\'92s there rpbolem.\
+build_tree (NOT REC) iterates through first guessed letters\
+we don\'92t need that anymore\
+alt_tree already has that covered}

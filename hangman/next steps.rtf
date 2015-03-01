@@ -1,0 +1,202 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;\red255\green255\blue255;
+\red239\green239\blue239;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid2\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid3\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li2160\lin2160 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid4\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li2880\lin2880 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid5\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li3600\lin3600 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid6\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li4320\lin4320 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww35020\viewh19540\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs26 \cf2 \cb3 Rather than build response boards from scratch (inefficient)\cb4 \
+\cb3 Work backwards from actual words, pick each of their letters and remove each combo of those letters from them, find their families thusly (they share all further deletion source boards from there), create tree that way\cb4 \
+\cb3 And you can pretty much rule out entire words and branches that way as you'll never end up on them\cb4 \
+\cb3 \
+It's an interesting question: what are the words evil hangman will never choose? Ie consider "apple" maybe there is no ORDER in which you could guess any COMBINATION (so, PERMUTATION) of its letters so that hangman would find it best to lead to apple as opposed to like whelp or something\cb4 \
+\cb3 \
+Maybe it's not doing the whole thing working backwards from words, but at least when preparing the valid response boards to iterate over, rather than dumbly building them from scratch and checking them for validity against the dictionary, you just start from the dict, all the ways just a exists - all the ways just z exists, then all the ways a&b - a&z, Etc\cb4 \
+\cb3 \
+Ok yeah this works MUCH faster but at this point only works for from blank board... Needs to build a tree as it goes, since it knows dropping both "a" and "p" is a parent of both just dropping "a" and just dropping "p"...?\'a0\cb4 \
+\
+
+\fs24 \cb5 \
+\cb4 \
+
+\fs26 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f1\b\fs24 \cf0 \cb1 \
+\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	1.	}\
+{\listtext	2.	}\
+{\listtext	3.	}\
+{\listtext	4.	}\
+{\listtext	5.	}Metagame
+\b0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}
+\i i could have a play again loop
+\i0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i \cf0 {\listtext	\uc0\u8259 	}i could have the ability to switch players 
+\i0 \
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}
+\i return as default - keep the same players and switch roles
+\i0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}
+\i i could keep track of number of wins per player\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i0\b \cf0 {\listtext	\uc0\u8259 	}Could have a leaderboard of losses vs wins.\
+{\listtext	\uc0\u8259 	}Able to save game\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\b0 \cf0 {\listtext	\uc0\u8259 	}
+\b need the ability to switch between AI levels
+\b0 \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	6.	}
+\b Bugs
+\b0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}
+\i the guess count going down by one at the end
+\i0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i \cf0 {\listtext	\uc0\u8259 	}Exit function just quits\
+{\listtext	\uc0\u8259 	}have it address the checker by name the first time\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i0\b \cf0 {\listtext	\uc0\u8259 	}have the instructions carry over from the metagame?? what did i mean by this?\
+{\listtext	\uc0\u8259 	}the leaderboard isn\'92t complete yet, so it says undefined method loser= \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\b0 \cf0 {\listtext	\uc0\u8259 	}
+\i it might be possible to say positions that have already been revealed\'85 k FIXED
+\i0 \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0
+\b \cf0 {\listtext	7.	}Levels of hard hangman AI
+\b0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}
+\i Hardest needs to assume you'll pick fhe best letter at each time\
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}So it may not be the best long term to  say no e if down the line it leads to the best player having it easier
+\i0 \
+{\listtext	\uc0\u8259 	}
+\b i could calculate if there is a word length for which there are no eight letter combinations that filter down to a single word
+\b0 \
+{\listtext	\uc0\u8259 	}
+\i So basically if you guess e on the first turn, it\'92s going to see okay, i have two choices: reveal an e, not reveal an e. \
+\pard\tx2380\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2880\fi-2880\pardirnatural
+\ls1\ilvl3\cf0 {\listtext	\uc0\u8259 	}there\'92s only one option for not revealing: the totally blank word. \
+{\listtext	\uc0\u8259 	}in a 7 letter word, though, there\'92s 6 + 36 + 103..d?DDioje whatever there\'92s a ton of them. \
+{\listtext	\uc0\u8259 	}so then for each of these hundreds of possibilities, we have to decide - which one will maximize the number of turns an ideal player will take to guess the word \
+\pard\tx3100\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li3600\fi-3600\pardirnatural
+\ls1\ilvl4\cf0 {\listtext	\uc0\u8259 	}(given that i\'92m allowed to switch it whenever i want)\'85 this might be key, because it makes it so you don\'92t have to worry so much about picking a \'93perfect word\'94 such as in my contact problem\
+{\listtext	\uc0\u8259 	}so i guess it\'92s a lot like how i already have it\'85 except if you include all the other words that do have the letter that you could switch to and reveal instead (removing that restriction) then maybe it\'92s far more likely that hal would take that path (earlier, such as when guessing an \'93e\'94 first\
+\pard\tx3820\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li4320\fi-4320\pardirnatural
+\ls1\ilvl5\cf0 {\listtext	\uc0\u8259 	}also hal should have the ability to switch his word TO INCLUDE a letter if the player is dumb enough to guess a letter which creates a situation where they can be more stumped than if they hadn\'92t guessed that stupid letter\
+{\listtext	\uc0\u8259 	}every guessed letter is just an opportunity to fuck the guesser over as much as possible\
+{\listtext	\uc0\u8259 	}starting from the very beginning\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}Alright so here we go: it\'92s not enough to simply pick the best one of these immediate nexts by immediate possibilities, you have to also consider their future potential. at least 5 steps (for all of the vowels). \
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}so on the HOME level, you just split it up by the letter that was actually guessed. (and we assume a player should guess \'93e\'94 first, if that matters)\
+{\listtext	\uc0\u8259 	}but for ANY DEEPER levels, you have to do this process (the splitting into _______, _____q, ____q_, ___q__, q_q___, q_qq_qq etc.) for EVERY letter. \
+{\listtext	\uc0\u8259 	}except you can\'92t assume there\'92s an equal chance the player will guess each of these letters\
+{\listtext	\uc0\u8259 	}you have to assume the player will be smart enough to guess the best letter\
+\pard\tx2380\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2880\fi-2880\pardirnatural
+\ls1\ilvl3\cf0 {\listtext	\uc0\u8259 	}which means guessing the one which maximizes their possibilities? if that were so, these AI\'92s would be too smart for each other\
+{\listtext	\uc0\u8259 	}so maybe it should just be a statistical thing?
+\i0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}
+\i alright and you also have to account for the issue that if you\'92re at the very end and there\'92s just one letter left and there\'92s three things it could be, that\'92s still 3 turns\'85 \
+{\listtext	\uc0\u8259 	}though if all you were doing was summing possibilities of words you\'92d barely be denting it, just adding 3 each time which is nothing compared to the like 6,000 words at earlier levels. so you have to get this in terms of TURNS it buys.\
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}so if there\'92s three letters left possible for a single space, it needs to understand that each of those is a turn\'85 but how\'85?\
+\pard\tx2380\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2880\fi-2880\pardirnatural
+\ls1\ilvl3\cf0 {\listtext	\uc0\u8259 	}i think it\'92s solved with a recursive / DFS, so it\'92s really, rather than looking for ones with the most possibilities, simply looking for the word which, the player guessing most common letters, would take the longest to find.\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i0 \cf0 {\listtext	\uc0\u8259 	}
+\i SO! FOR A GIVEN BOARD STATE, anything from all blanks at the beginning, to something with some set letters mixed in (let\'92s say E and T), and a letter L having just been guessed:\
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}you consider not revealing an L\
+{\listtext	\uc0\u8259 	}and you consider that choice against every choice of single or multiple L\'92s you could reveal \
+\pard\tx2380\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2880\fi-2880\pardirnatural
+\ls1\ilvl3\cf0 {\listtext	\uc0\u8259 	}for each of these latter cases, you iterate through all the letters (remaining after the ones already guessed, including L, so skip E, T, and L)\
+{\listtext	\uc0\u8259 	}OR\'85 NO!\
+{\listtext	\uc0\u8259 	}you JUST look at the next best letter the ideal computer guesser would guess from the remaining word set\
+\pard\tx3100\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li3600\fi-3600\pardirnatural
+\ls1\ilvl4\cf0 {\listtext	\uc0\u8259 	}for each of this letter\'92s reveal combinations, AGAIN including NOT revealing, you check the next best letter (note: each time you do this, the next best letter might / should [esp later on] be different depending on which combination you reveal.)\
+\pard\tx3820\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li4320\fi-4320\pardirnatural
+\ls1\ilvl5\cf0 {\listtext	\uc0\u8259 	}so you keep going like this, keeping track ONLY OF DEPTH. you don\'92t really care about the dictionary count\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\ls1\ilvl1
+\i0 \cf0 {\listtext	\uc0\u8259 	}
+\b should i include the frequency analysis of words to make it extra hard for humans to get it?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\ls1\ilvl1
+\i\b0 \cf0 {\listtext	\uc0\u8259 	}also need to be careful not to count guesses where they won\'92t waste a wrong guess\'85 if it\'92s a long sequence to the final word but there\'92s only one possibility at each turn then they won\'92t mess up
+\i0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\b \cf0 {\listtext	\uc0\u8259 	}Have them be separate classes the toughnesses and have it just replace the guess function\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i\b0 \cf0 {\listtext	\uc0\u8259 	}I didn't have the guesser maximize for letters in different spots... if that's even better...\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i0\b \cf0 {\listtext	\uc0\u8259 	}super computer should still pick a random word length at the beginning\'85 different types of challenges\
+{\listtext	\uc0\u8259 	}have a version of hard ai that assumes you\'92re always switching the word and optimizes for that?\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	8.	}Refactor until pretty
+\b0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 
+\b 	}
+\b0 private/public, attr_\'92s\
+{\listtext	\uc0\u8259 	}make methods which should be self.method (such as on_board?) because they don\'92t depend on instances and when you call them will be Board.on_board? instead of @board.on_board?\
+{\listtext	\uc0\u8259 	}smaller methods\
+{\listtext	\uc0\u8259 	}general cleanup\
+{\listtext	\uc0\u8259 	}keep errors in a separate file. have the custom error messages but standardize the format of all the catchings\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i \cf0 {\listtext	\uc0\u8259 	}rename files
+\i0 \
+\ls1\ilvl1
+\i {\listtext	\uc0\u8259 	}CJ\'92s challenge
+\i0 \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0\cf0 {\listtext	9.	}
+\b UI
+\b0 \
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\b \cf0 {\listtext	\uc0\u8259 	}colorize? curses?\
+{\listtext	\uc0\u8259 	}could have hal update you as he\'92s thinking\
+{\listtext	\uc0\u8259 	}using names for short should work (HAL should get HAL 9000)\
+{\listtext	\uc0\u8259 	}if hal could do his work in the background while you were thinking, that would be preferable. determining the best word for each letter, starting with the most likely one you are to guess\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i\b0 \cf0 {\listtext	\uc0\u8259 	}can it accept spaces in input\
+{\listtext	\uc0\u8259 	}when hal knows the word he always guesses from the back. kinda weird but maybe it\'92s okay\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1
+\i0 \cf0 {\listtext	\uc0\u8259 	}
+\b word, then length, THEN guess attempts? \'85 well but you don\'92t know you need that until \'85 nah okay i should redo this\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls1\ilvl0
+\b0 \cf0 {\listtext	10.	}SPEED\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}learn what i need to do to make this guy run faster\
+{\listtext	\uc0\u8259 	}or i should just one time create a file which stores the tree for each letter? no that\'92s insane\'85\
+}
